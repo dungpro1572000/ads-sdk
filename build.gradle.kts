@@ -7,10 +7,10 @@ plugins {
 
 android {
     namespace = "com.yourcompany.adssdk"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
-        minSdk = 30
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -42,54 +42,43 @@ android {
 }
 
 dependencies {
-    // Kotlin
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    // Kotlin Coroutines
+    implementation(libs.kotlinx.coroutines.android)
 
     // AndroidX
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
 
     // Compose
-    implementation(platform("androidx.compose:compose-bom:2024.01.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
 
     // Google Mobile Ads (AdMob)
-    implementation("com.google.android.gms:play-services-ads:23.6.0")
+    implementation(libs.play.services.ads)
 
     // Testing
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
-// Publishing configuration
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "com.yourcompany"
-            artifactId = "ads-sdk"
-            version = "1.0.0"
-
-            afterEvaluate {
+// Publishing configuration for JitPack
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
                 from(components["release"])
-            }
-        }
-    }
 
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/yourusername/ads-sdk")
-            credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USER")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+                groupId = "com.github.dungpro1572000"
+                artifactId = "ads-sdk"
+                version = "1.0.0"
             }
         }
     }
